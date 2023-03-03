@@ -3,19 +3,18 @@ import express, { Application } from 'express';
 import { config } from 'dotenv';
 import connectMongoDB from './db/connectMongo';
 import prodouctRoute from './routes/product.routes';
-import ErrorHandling from "./middleware/error";
+import ErrorHandler from './middleware/error';
 const app: Application = express();
 config();
-
 
 // middlewares
 app.use(express.json());
 
 // all routes
-app.use("/api/v1",prodouctRoute);
+app.use('/api/v1', prodouctRoute);
 
 // middleware for error handling
-app.use(ErrorHandling);
+app.use(ErrorHandler);
 
 // server start code
 const startServer = async (url: string | undefined) => {

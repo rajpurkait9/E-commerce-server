@@ -1,23 +1,17 @@
-import ErrorHandler from '../utils/errorHandle';
-import { Response, Request, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-export enum StatusCode {
-  OK = 200,
-  BAD_REQUEST = 400,
-  UNAUTHORIZED = 401,
-  NOT_FOUND = 404,
-  FORBIDDEN = 403,
-  INTERNAL_SERVER_ERROR = 500,
-}
-const ErrorHandling = (
-  err: ErrorHandler,
+const ErrorHandler = (
+  err: any,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  err.statusCode = err.statusCode;
-  err.message = err.message;
-
-  res.status(err.statusCode).json(err.message);
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  res.status(statusCode);
+  res.json({
+    message: err.message,
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+  });
 };
-export default ErrorHandling;
+
+export default ErrorHandler;
